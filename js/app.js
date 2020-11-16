@@ -18,6 +18,7 @@
  *
  */
 const docFrag = document.createDocumentFragment()
+const navBar = document.querySelector(".page__header")
 const newNavItem = document.createElement("li")
 const navBarList = document.querySelector("#navbar__list")
 const sections = document.querySelectorAll("section")
@@ -27,7 +28,7 @@ const sections = document.querySelectorAll("section")
  *
  */
 navItem = (id, name) => {
-  const navHTML = `<a href="#${id}" class="menu__link" data-id="${id}">${name}</a>`
+  const navHTML = `<a class="menu__link" data-id="${id}">${name}</a>`
   return navHTML
 }
 /**
@@ -51,7 +52,27 @@ buildTheNav = () => {
 // Add class 'active' to section when near top of viewport
 
 // Scroll to anchor ID using scrollTO event
+scrollLinks = () => {
+  const links = document.querySelectorAll(".menu__link")
 
+  links.forEach(link => {
+    link.addEventListener("click", e => {
+      // e.preventDefault()
+      const dataId = e.currentTarget.dataset.id
+      const section = document.querySelector("#" + dataId)
+      const navBarHeight = navBar.getBoundingClientRect().height
+      const windowHeight = window.innerHeight - navBarHeight
+      const sectionHeight = section.getBoundingClientRect().height
+      const topGap = windowHeight - sectionHeight
+      let sectionPosition = section.offsetTop
+      window.scrollTo({
+        top: sectionPosition - topGap,
+        left: 0,
+        behavior: "smooth"
+      })
+    })
+  })
+}
 /**
  * End Main Functions
  * Begin Events
@@ -61,5 +82,5 @@ buildTheNav = () => {
 // Build menu
 document.body.onload = buildTheNav()
 // Scroll to section on link click
-
+document.body.onload = scrollLinks()
 // Set sections as active
