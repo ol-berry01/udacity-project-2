@@ -50,14 +50,24 @@ buildTheNav = () => {
   navBarList.appendChild(docFrag)
 }
 // Add class 'active' to section when near top of viewport
-
+sectionActive = () => {
+  sections.forEach(section => {
+    section.classList.remove("your-active-class")
+  })
+  document.addEventListener("scroll", () => {
+    const viewport = window.innerHeight
+    sections.forEach(section => {
+      const sectionBox = section.getBoundingClientRect()
+      sectionBox.top >= 0 && sectionBox.bottom <= viewport ? section.classList.add("your-active-class") : section.classList.remove("your-active-class")
+    })
+  })
+}
 // Scroll to anchor ID using scrollTO event
 scrollLinks = () => {
   const links = document.querySelectorAll(".menu__link")
 
   links.forEach(link => {
     link.addEventListener("click", e => {
-      // e.preventDefault()
       const dataId = e.currentTarget.dataset.id
       const section = document.querySelector("#" + dataId)
       const navBarHeight = navBar.getBoundingClientRect().height
@@ -84,3 +94,4 @@ document.body.onload = buildTheNav()
 // Scroll to section on link click
 document.body.onload = scrollLinks()
 // Set sections as active
+document.body.onload = sectionActive()
